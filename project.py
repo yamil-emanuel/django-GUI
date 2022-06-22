@@ -39,10 +39,11 @@ class VirtualEnviroment:
 		os.chdir("..")
 
 class DIR:
-	def __init__(self, venv:VirtualEnviroment):
+	def __init__(self, venv:VirtualEnviroment, project_name:str):
+		self.project_name=project_name
 		self.venv=venv
-		self.PROJECT_DIR=f"{CONFIG.BASE_PATH.value}/{self.venv.VENV_NAME}/{self.venv.VENV_NAME}"
-		self.VENV_DIR=f"{CONFIG.BASE_PATH.value}/{self.venv.VENV_NAME}"
+		self.PROJECT_DIR=f"{CONFIG.BASE_PATH.value}\\{self.venv.VENV_NAME}\\{self.project_name}"
+		self.VENV_DIR=f"{CONFIG.BASE_PATH.value}\\{self.venv.VENV_NAME}"
 
 class Navigator:
 	def navigate_to(path):
@@ -69,9 +70,9 @@ class CreateProject:
 		if os.path.isdir(self.paths.PROJECT_DIR): #If path exists
 			print("Project already exists.")
 		else:
-			print(f"Creating project : {self.venv.VENV_NAME}")
+			print(f"Creating project : {self.paths.project_name}")
 			os.chdir(f"{self.paths.VENV_DIR}")
-			os.system(f"django-admin startproject {self.venv.VENV_NAME}")
+			os.system(f"django-admin startproject {self.paths.project_name}")
 
 class ComplementaryFolders:
 	#CREATE YOUR FOLDER HERE
@@ -91,9 +92,10 @@ class ComplementaryFolders:
 	def CreateFolders(self):
 		for folder in self.order:
 			if type(folder) == dict and folder["name"]!=None:
-				#os.chdir("..")
+				os.chdir("..")
 				path = f"{folder['path']}"
 				name= f"{folder['name']}"
+				print(path)
 				try:
 					os.chdir(path)
 					os.makedirs(name)

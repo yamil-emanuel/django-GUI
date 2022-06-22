@@ -1,6 +1,9 @@
+from string import Template
+from templates.project_base import *
+from templates.app_base import *
 from project import * 
-from utils import createfile
-
+from utils import *
+from config import *
 
 class CreateApp:
 	def __init__(self, venv:VirtualEnviroment, app_name, paths:DIR):
@@ -8,6 +11,7 @@ class CreateApp:
 		self.app_name=app_name
 		self.paths=paths
 		self.app_file=f"{self.paths.PROJECT_DIR}/MODULES/{self.app_name}/apps.py"
+		
 
 
 	def create(self):
@@ -19,7 +23,7 @@ class CreateApp:
 			os.system(f"django-admin startapp {self.app_name}")
 
 	def config(self):
-		ConfigureAPP(self).ConfigAppFile()
+		ConfigureAPP(self).SetRouting()
 		ConfigureAPP(self).InstallApp()
 
 class ConfigureAPP(CreateApp):
@@ -40,6 +44,10 @@ class ConfigureAPP(CreateApp):
 					file.write(data)
 			else:
 				print("apps.py already configured")
+
+	def InstallApp(self):
+		print("INSTALLING APP")
+		apps_installed.append(self.app.app_name)
 
 class ComplementaryFiles(CreateApp):
 	def __init__(self, app:CreateApp):
