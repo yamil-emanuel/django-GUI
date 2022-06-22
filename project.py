@@ -38,6 +38,7 @@ class VirtualEnviroment:
 		os.startfile("activate")
 		os.chdir("..")
 
+
 class DIR:
 	def __init__(self, venv:VirtualEnviroment, project_name:str):
 		self.project_name=project_name
@@ -50,15 +51,6 @@ class Navigator:
 		os.system("..")
 		os.chdir(path)
 
-class RunServer:
-	def __init__(self, venv:VirtualEnviroment):
-		self.venv=venv
-
-	def run(self):
-		self.venv.activate()
-		os.chdir(DIR.PROJECT_DIR)
-		os.system("python manage.py runserver")
-		print("Running")
 
 class CreateProject:
 	def __init__(self, venv:VirtualEnviroment, paths=DIR):
@@ -85,9 +77,10 @@ class ComplementaryFolders:
 		self.css={"name":'css',"path":f"{self.paths.PROJECT_DIR}\\static\\assets"}
 		self.js={"name":'js',"path":f"{self.paths.PROJECT_DIR}\\static\\assets"}
 		self.img={"name":'img',"path":f"{self.paths.PROJECT_DIR}\\static\\assets"}
-		self.TEMPLATES={"name":"templates", "path": f"{self.paths.PROJECT_DIR}"}
-
-		self.order=[self.static, self.TEMPLATES, self.assets, self.modules, self.css, self.js, self.img]
+		self.TEMPLATES={"name":"templates", "path": f"{self.paths.PROJECT_DIR}" }
+		self.apps_data={"name":"apps_data","path": f"{self.paths.PROJECT_DIR}"}
+		
+		self.order=[self.static, self.TEMPLATES, self.assets, self.modules, self.css, self.js, self.img, self.apps_data]
 
 	def CreateFolders(self):
 		for folder in self.order:
@@ -95,7 +88,6 @@ class ComplementaryFolders:
 				os.chdir("..")
 				path = f"{folder['path']}"
 				name= f"{folder['name']}"
-				print(path)
 				try:
 					os.chdir(path)
 					os.makedirs(name)

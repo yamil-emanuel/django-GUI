@@ -4,11 +4,17 @@ from utils import *
 
 
 def format_template(data:list)->str:
-	data=[f"'{element}'" for element in data]
-	return (",").join(data)
+	if len(data)>0:
+		data=[f"'{element}'" for element in data]
+		return f"{(',').join(data)},"
+	else:
+		return ""
 
 def format_string(string:str)->None:
-	return f"'{string}'"
+	if len(string)>0:
+		return f"'{string}'"
+	else:
+		return ""
 
 class ProjectTemplateFiller:
 
@@ -49,7 +55,7 @@ class ProjectTemplateFiller:
 		}
 
 		self.project_urls_py={
-			"IMPORT":self.url_import,
+			"IMPORT":format_template(self.url_import),
 			"PATHS":format_template(self.paths_import)
 		}
 
@@ -67,4 +73,6 @@ class ProjectTemplateFiller:
 		data=Template(open(self.urls_file,"r").read())
 		write(data.substitute(self.project_urls_py),self.urls_file)
 		print("urls.py file uploaded")
+
+
 

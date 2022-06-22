@@ -1,14 +1,17 @@
 
-VENV_NAME="VENV_PRUEBA2"
+VENV_NAME="Final"
 PROJECT_NAME="TODO_APP"
 
 
 apps_installed=[] #When app is instaled (config() method) all the apps will appear here
-middleware_installed=["casa","pepe"]
+middleware_installed=[]
 templates="templates/"
-language_code="es-es"
+language_code="en-us"
 static_url="static/"
 others=""
 
-url_import=["form.blabla.blabla"]
-paths_import=["path(/asdasd, asdas)"]
+url_import=[]
+paths_import=[]
+
+
+

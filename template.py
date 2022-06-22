@@ -7,11 +7,11 @@ from utils import *
 """PROJECT TEMPLATES"""
 class UrlTags(Enum):
 	IMPORT={"tag":"$IMPORT", "previous_word":"from django.urls import path","offset":0,"before":"\n", "end":"\n\n"} #OK
-	PATHS={"tag":"$PATHS", "previous_word":"path('admin/', admin.site.urls),","offset":0, "before":"\n	", "end":" ,"} #OK
+	PATHS={"tag":"$PATHS", "previous_word":"path('admin/', admin.site.urls),","offset":0, "before":"\n	", "end":""} #OK
 
 class SettingsTags(Enum):
-	INSTALLED_APPS={"tag":"$INSTALLED_APPS", "previous_word":"django.contrib.staticfiles", "offset":2 ,"before":"", "end":","} #OK
-	MIDDLEWARE =  {"tag": "$MIDDLEWARE", "previous_word": "django.middleware.clickjacking.XFrameOptionsMiddleware" , "offset":2,"before":"", "end": ","} #OK
+	INSTALLED_APPS={"tag":"$INSTALLED_APPS", "previous_word":"django.contrib.staticfiles", "offset":2 ,"before":"", "end":""} #OK
+	MIDDLEWARE =  {"tag": "$MIDDLEWARE", "previous_word": "django.middleware.clickjacking.XFrameOptionsMiddleware" , "offset":2,"before":"", "end": ""} #OK
 	TEMPLATES= {"tag": "$TEMPLATES" , "previous_word": "DIRS" , "offset":4,"before":"", "end": ""} #OK
 	LANGUAGE_CODE= {"tag": "$LANGUAGE_CODE" , "previous_word":"LANGUAGE_CODE" , "offset":3,"before":"", "end": "", 'replace':"'en-us'"} #OK
 	STATIC_URL= {"tag": "$STATIC_URL", "previous_word": "STATIC_URL", "offset":3,"before":"", "end": "", "replace":"'static/'" } #OK
@@ -25,6 +25,11 @@ class InitTemplates:
 		self.urls_file=f"{project.paths.PROJECT_DIR}/{self.project.project_name}/urls.py"
 
 	def MakeTemplates(self):
+		with open (self.settings_file, "r") as f:
+			data=str(f.read()).replace("$","")
+			with open(self.settings_file, "w") as f:
+				f.write(data)
+				
 		[InjectTag(tag.value, self.settings_file) for tag in SettingsTags]
 		[InjectTag(tag.value, self.urls_file ) for tag in UrlTags]
 

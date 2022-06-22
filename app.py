@@ -47,14 +47,14 @@ class ConfigureAPP(CreateApp):
 
 	def InstallApp(self):
 		print("INSTALLING APP")
-		apps_installed.append(self.app.app_name)
+		apps_installed.append(f"MODULES.{self.app.app_name}")
 
 class ComplementaryFiles(CreateApp):
 	def __init__(self, app:CreateApp):
 		self.app=app
 		self.path=f"{self.app.paths.PROJECT_DIR}/MODULES/{self.app.app_name}"
 
-		self.files=["urls.py","validators.py","forms.py"]
+		self.files=["urls.py","validators.py","forms.py","app_config.py"]
 
 	def create(self):
 		for file in self.files:

@@ -2,7 +2,8 @@ from project import *
 from app import *
 from template import *
 from config import *
-
+from os import listdir
+from os.path import isfile
 
 class Project:
 	"""Project controller, creates virtual enviroment, initializes the project and runs the server """
@@ -15,6 +16,18 @@ class Project:
 		self.complementaryFolders=ComplementaryFolders(self.paths)
 		self.init_templates=InitTemplates(self)
 
+	def pre_launch(self):
+		#cleans every unused $TAG in APPS folders
+		files=['admin.py', 'apps.py', 'forms.py', 'models.py', 'tests.py', 'urls.py', 'validators.py', 'views.py']
+
+		for app in apps_installed:
+			os.chdir(f"{self.paths.PROJECT_DIR}/MODULES/{app[8:]}")
+			path=os.getcwd()
+			for file in files:
+				f=str(open(f"{path}/{file}","r").read()).split("\n")
+				filtered="\n".join([chunk for chunk in f if chunk.startswith("$")==False])
+				with open (f"{path}/{file}","w") as f:
+					f.write(filtered)
 
 	def start(self):
 
@@ -25,7 +38,10 @@ class Project:
 		self.init_templates.MakeTemplates() #Inject template tags in base files
 
 	def run_server(self):
-		self.venv.activate()
+		self.pre_launch()
+		os.chdir(f"{self.paths.PROJECT_DIR}")
+		os.system("python manage.py runserver")
+		print("Running")
 
 class APP:
 	""" Manages all the apps of the project """
@@ -53,17 +69,31 @@ class TemplateFiller:
 	def __init___(self):
 		pass
 
+class Build():
+	def __init__(self, project, app_list):
+		self.project=project
+		self.app_list=app_list
+
+		if len(app_list)==0:
+			print("bla")
+
+
+
+
+
 
 """HOW TO INIT """
 project=Project(VENV_NAME, PROJECT_NAME) #ASIGN PROJECT NAME
 project.start() #START
 
 """CREATING APPS"""
-app_list=["app_django"]
+
+app_list=["my_app"]
 apps=[APP(project,app).CreateApp() for app in app_list]
 
 
-"""FILLING DJANGO PROJECT FILLES (settings&URL)"""
+
+#FILLING DJANGO PROJECT FILLES (settings&URL)
 ProjectTemplateFiller(project, 
 	apps_installed=apps_installed,
 	middleware_installed=middleware_installed,
@@ -74,3 +104,5 @@ ProjectTemplateFiller(project,
 	url_import=url_import,
 	paths_import=paths_import).fill()
 
+builder=Build(project,app_list)
+project.run_server()
